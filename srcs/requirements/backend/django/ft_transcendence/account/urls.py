@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import UserViewSet, LoginView
+from .views import UserViewSet, LoginView, LogoutView, ProfileView
 
 app_name = 'account'
 
 urlpatterns = [
 	path('login/', LoginView.as_view(), name='login'),
-	path('logout/', UserViewSet.logout, name='logout'),
+	path('logout/', LogoutView.as_view(), name='logout'),
 	path('register/', UserViewSet.as_view({'post': 'register'}), name='register'),
-	path('profile/', UserViewSet.profile, name='profile'),
-	path('', UserViewSet.as_view({'get': 'list'}), name='list'),
+	path('profile/', ProfileView.as_view(), name='profile'),
+	path('', ProfileView.as_view(), name='account'),
 ]

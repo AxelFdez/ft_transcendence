@@ -7,7 +7,7 @@ services:
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
-             python manage.py create_superuser &&
+             python manage.py shell < create_superuser.py &&
              python manage.py runserver 0.0.0.0:8000"
     depends_on:
       postgresql:
@@ -47,4 +47,4 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/axelfernandez/ecole42/cursus42/ft_transcendence/srcs/requirements/backend/DB/'
+      device: '/Users/axelfernandez/ecole42/cursus42/ft_transcendence/srcs/requirements/backend/postgresql/DB/'

@@ -26,22 +26,6 @@ class UserViewSet(viewsets.ModelViewSet):
     #         serializer.save()
     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    @action(detail=False, methods=['post'])
-    @csrf_exempt
-    def login(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            if User.objects.filter(username=serializer.data['username']).exists():
-                user = User.objects.get(username=serializer.data['username'])
-                if user.check_password(serializer.data['password']):
-                    return redirect("/api/token/")
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
-    def logout(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=False, methods=['post'])
     @csrf_exempt
@@ -56,11 +40,31 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def profile(self, request):
-        serializer = UserSerializer(data=request.data)
+
+class ProfileView(APIView):
+
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user_entries = User.objects.filter(username=user)
+        serializer = UserSerializer(user_entries, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def patch(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True, context={'request': request})
+        serializer = UserSerializer(user, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,request):
+        user = request.user
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class LoginView(APIView):
     def post(self, request):
@@ -74,3 +78,9 @@ class LoginView(APIView):
                 'access': str(refresh.access_token),
             })
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+class LogoutView(APIView):
+
+    def get(self):
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
