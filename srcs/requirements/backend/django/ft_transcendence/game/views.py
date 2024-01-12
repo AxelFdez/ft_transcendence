@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
 from django.shortcuts import get_object_or_404
+from account.models import UserProfile
 
 class GameView(APIView):
 
@@ -31,5 +32,18 @@ class GameView(APIView):
 		serializer = serializers.GameSerializer(game_entries, data=request.data, partial=True, context= { id : get_object_or_404(models.Game, pk = id)})
 		if serializer.is_valid():
 			serializer.save()
+			if serializer.validated_data['player_one'] is not None:
+				user1 = UserProfile.objects.get(user=serializer.validated_data['player_one'])
+				user1.games_id.add(id)
+			if serializer.validated_data['player_two'] is not None:
+				user2 = UserProfile.objects.get(user=serializer.validated_data['player_two'])
+				user2.games_id.add(id)
+			if serializer.validated_data['winner'] is not None:
+				userwin = UserProfile.objects.get(user=serializer.validated_data['winner'])
+				if userwin == user1:
+					user1.win += 1
+					user2.lose += 1
+				user1.save()
+				user2.save()
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

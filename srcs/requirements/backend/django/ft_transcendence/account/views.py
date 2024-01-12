@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
+from .models import UserProfile
 
 
 
@@ -37,6 +38,7 @@ class UserViewSet(viewsets.ModelViewSet):
             email=serializer.validated_data.get('email'),
             password=serializer.validated_data['password']
             )
+            UserProfile.objects.create(user=user)
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -48,12 +50,12 @@ class ProfileView(APIView):
     def get(self, request):
         user = request.user
         user_entries = User.objects.filter(username=user)
-        serializer = UserSerializer(user_entries, many=True, context={'request': request})
+        user_profile = UserProfile.objects.filter(user=user)
+        serializer = UserSerializer(user_profile, many=True, context={'request': request})
         return Response(serializer.data)
 
     def patch(self, request):
         user = request.user
-        serializer = UserSerializer(user, data=request.data, partial=True, context={'request': request})
         serializer = UserSerializer(user, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
