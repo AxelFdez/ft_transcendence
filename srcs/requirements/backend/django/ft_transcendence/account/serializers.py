@@ -1,16 +1,16 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import UserProfile
-from game.serializers import GameSerializer
-
-class UserDefaultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'last_login']
+#from game.serializers import GameSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'last_login']
 
-    user = UserDefaultSerializer()
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer()
     #games_id = GameSerializer(many=True)
 
     class Meta:

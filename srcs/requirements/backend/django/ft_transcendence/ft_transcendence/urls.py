@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import include, path
-from rest_framework import routers
+#from rest_framework import routers
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -23,18 +23,18 @@ from rest_framework_simplejwt.views import (
 
 from account import views
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
+#router = routers.DefaultRouter()
+#router.register(r'users', views.UserViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
+    #path('api/', include('account.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 	path('api/account/', include('account.urls')),
 	path('api/game/', include('game.urls')),
-	path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+	#path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
-urlpatterns += router.urls
+#urlpatterns += router.urls
