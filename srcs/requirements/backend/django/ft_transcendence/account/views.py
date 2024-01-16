@@ -9,6 +9,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from .models import UserProfile
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class UserRegisterView(APIView):
@@ -83,21 +85,37 @@ class getProfileView(APIView):
         return Response(serializer.data)
 
 
-class LoginView(APIView):
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            })
-        return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+class LoginView(TokenObtainPairView):
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            username = request.data.get('username')
+            password = request.data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                user_profile = UserProfile.objects.filter(user=user).first()
+                if user_profile:
+                    user_profile.is_connected = True
+                    user_profile.save()
+        return response
 
 class LogoutView(APIView):
-    def get(self):
+    def get(self, request):
+        user = request.user
+        user_profile = UserProfile.objects.filter(user=user).first()
+        user_profile.is_connected = False
+        user_profile.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class isIngame(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def put(self, request):
+        user = request.user
+        user_profile = UserProfile.objects.filter(user=user).first()
+        if user_profile.is_ingame:
+            user_profile.is_ingame = False
+        else:
+            user_profile.is_ingame = True
+        user_profile.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
