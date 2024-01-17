@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer, UserProfileSerializer
+from .serializers import UserSerializer, UserProfileSerializer, UpdateAvatarSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -11,7 +11,9 @@ from .models import UserProfile
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from django.http import HttpResponse
+from django.core.files.storage import default_storage
+from rest_framework.parsers import MultiPartParser
 
 class UserRegisterView(APIView):
     @csrf_exempt
@@ -29,7 +31,7 @@ class UserRegisterView(APIView):
                 email=email,
             )
             UserProfile.objects.create(user=user)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AllUserView(APIView):
@@ -119,3 +121,34 @@ class isIngame(APIView):
             user_profile.is_ingame = True
         user_profile.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AvatarView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get (self, request, avatar):
+        try:
+            user = request.user
+            user_profile = UserProfile.objects.get(user=user)
+            if user_profile.avatar:
+                image_path = 'account/avatar/' + user_profile.avatar.name.split('/')[-1]
+                with default_storage.open(image_path, 'rb') as image_file:
+                    image_data = image_file.read()
+                image_extension = avatar.split('.')[-1]
+                return HttpResponse(image_data, content_type='image/' + image_extension)
+            else:
+                return HttpResponse(status=404)
+        except UserProfile.DoesNotExist:
+            return HttpResponse(status=404)
+
+class UpdateAvatarView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser]
+    allowed_methods = ['PUT']
+
+    def put(self, request):
+        user_profile = request.user.userprofile
+        serializer = UpdateAvatarSerializer(user_profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors ,status=status.HTTP_400_NO_CONTENT)
