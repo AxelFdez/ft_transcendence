@@ -27,8 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY_DJANGO')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['nginx_container', 'localhost',]
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'corsheaders',
 	'rest_framework',
 	'rest_framework_simplejwt',
 	'account',
@@ -47,11 +47,20 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+	'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost',
+]
+
+CORS_ALLOW_HEADERS = [
+    'Authorization',
 ]
 
 ROOT_URLCONF = 'ft_transcendence.urls'
@@ -84,7 +93,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        # 'HOST': 'postgresql_container',
+        #'HOST': 'postgresql_container',
 		'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -122,6 +131,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+TWILIO_SID = os.environ.get('TWILIO_SID')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+TWILIO_SERVICE_ID = os.environ.get('TWILIO_SERVICE_ID')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -150,3 +162,10 @@ SIMPLE_JWT = {
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # SECURE_SSL_REDIRECT = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'axesnake@hotmail.fr'
+EMAIL_HOST_PASSWORD = 'splintersnake25'
