@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,10 +28,19 @@ SECRET_KEY = os.environ.get('SECRET_KEY_DJANGO')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nginx_container', 'localhost',]
+# Domain Name
+
+SITE_URL = os.environ.get('SITE_PROTOCOL') + os.environ.get('SITE_URL') + ":" + os.environ.get('SITE_PORT')
+
+# ALLOWED_HOSTS = [os.environ.get('SITE_URL'), 'localhost']
+ALLOWED_HOSTS = ['*']
+
 # Application definition
 
+
 INSTALLED_APPS = [
+	'websocket',
+	'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,27 +52,59 @@ INSTALLED_APPS = [
 	'rest_framework_simplejwt',
 	'account',
 	'game',
+	'chat',
+	'friend_management',
+	'django_prometheus',
+	'background_task',
 ]
 
+ASGI_APPLICATION = "ft_transcendence.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis_container", 6379)],
+        },
+    },
+}
+
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
 	'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
  # CORS settings (Cross-Origin Resource Sharing)
 
+# CORS_ALLOW_ANY_ORIGIN = True
+CORS_ALLOW_PRIVATE_NETWORK : True
+
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost',
+	SITE_URL,
 ]
 
 CORS_ALLOW_HEADERS = [
     'Authorization',
+	'accept',
+    'accept-encoding',
+	'Content-Type',
+	'code',
+	'token',
+    'Access-Control-Allow-Origin',
+    'Referer',
+    'Sec-Ch-Ua',
+    'Sec-Ch-Ua-Mobile',
+    'Sec-Ch-Ua-Platform',
+    'User-Agent',
+    'Origin',
+    'Host',
 ]
 
 ROOT_URLCONF = 'ft_transcendence.urls'
@@ -70,7 +112,7 @@ ROOT_URLCONF = 'ft_transcendence.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -95,7 +137,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': 'postgresql_container',
         'PORT': '5432',
     }
 }
@@ -151,10 +193,11 @@ REST_FRAMEWORK = {
     )
 }
 
+
  # JWT settings
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	'UPDATE_LAST_LOGIN': True,
 }
@@ -165,15 +208,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_AUTHENTICATION = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_APPLICATION_PASSWORD')
+EMAIL_FROM = "Pong_Verfication"
 
-TWILIO_SID = os.environ.get('TWILIO_SID')
-TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
-TWILIO_SERVICE_ID = os.environ.get('TWILIO_SERVICE_ID')
+HTTPSMS_KEY = os.environ.get('HTTPSMS_KEY')
+HTTPSMS_URL = os.environ.get('HTTPSMS_URL')
+HTTPSMS_PHONE = os.environ.get('HTTPSMS_PHONE')
 
+# OAUTH 42 settings
 
+OAUTH_CLIENT_ID = os.environ.get('OAUTH_CLIENT_ID')
+OAUTH_CLIENT_SECRET = os.environ.get('OAUTH_CLIENT_SECRET')
+OAUTH_REDIRECT_URI = SITE_URL
+OAUTH_PASSWORD_42 = os.environ.get('OAUTH_PASSWORD_42')
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
 # SECURE_SSL_REDIRECT = True

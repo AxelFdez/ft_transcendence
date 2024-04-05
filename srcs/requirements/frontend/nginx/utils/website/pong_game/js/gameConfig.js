@@ -6,9 +6,15 @@ let     onePlayer = false, twoPlayers = false, tournament = false;
 let     level;
 let     playLocal = false;
 let     playOnline = false;
+let     playTournament = false;
 let     ballLaunched = false;
 let     leftPlayerScore = 0, rightPlayerScore = 0;
-let     ballSpeedX, ballSpeedY;
+let     ballSpeedX = 0, ballSpeedY = 0;
+
+let     spaceRight;
+
+
+
 
 // Initialisation des raquettes
 let     paddleWidth = 9, paddleHeight = 100;
@@ -31,11 +37,11 @@ const applauseFX = new Audio('./sounds/applauseSound.wav');
 
 //******************************** Key Events ***********************
 // left player 1
-let wKeyPressed = false;
-let sKeyPressed = false;
+let q_keyPressed = false;
+let a_keyPressed = false;
 // right player 2
-let arrowUpPressed = false;
-let arrowDownPressed = false;
+let p_keyPressed = false;
+let l_keyPressed = false;
 
 let spaceBarPressed = false;
 
@@ -45,37 +51,37 @@ window.addEventListener("keydown", (event) => {
 
     switch(event.key) {
 
-        case "ArrowUp":
-            arrowUpPressed = true;
+        case "q":
+            q_keyPressed = true;
             break;
-        case "ArrowDown":
-            arrowDownPressed = true;
+        case "a":
+            a_keyPressed = true;
             break;
-        case "w":
-            wKeyPressed = true;
+        case "p":
+            p_keyPressed = true;
             break;
-        case "s":
-            sKeyPressed = true;
+        case "l":
+            l_keyPressed = true;
             break;
     }
-   
+
 });
 
 window.addEventListener("keyup", (event) => {
 
     switch(event.key) {
 
-        case "ArrowUp":
-            arrowUpPressed = false;
+        case "q":
+            q_keyPressed = false;
             break;
-        case "ArrowDown":
-            arrowDownPressed = false;
+        case "a":
+            a_keyPressed = false;
             break;
-        case "w":
-            wKeyPressed = false;
+        case "p":
+            p_keyPressed = false;
             break;
-        case "s":
-            sKeyPressed = false;
+        case "l":
+            l_keyPressed = false;
             break;
     }
 });
@@ -83,7 +89,7 @@ window.addEventListener("keyup", (event) => {
 // Space bar
 window.addEventListener("keydown", (event) => {
     if (event.key === " ") {
-        
+
         spaceBarPressed = true;
     }
 });
