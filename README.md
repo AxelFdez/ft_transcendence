@@ -21,13 +21,12 @@ Bonus:
 11. Minor Module: Monitoring System
 12. Minor Module: Support on All Devices
 
-
 ## Gallery
 
 ![screenshot](pic/1.png)
 ![screenshot](pic/2.png)
 ![screenshot](pic/3.png)
-![screenshot](pic/4.png)
+![screenshot](pic/4(1).png)
 
 
 ## Site Availability
