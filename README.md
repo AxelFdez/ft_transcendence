@@ -23,7 +23,7 @@ This project aims to create a website for participating in a competition of the 
 ![screenshot](pic/1.png)
 ![screenshot](pic/2.png)
 ![screenshot](pic/3.png)
-![screenshot](pic/4(1).png)
+![screenshot](pic/4.png)
 
 
 ## Site Availability
