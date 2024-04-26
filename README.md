@@ -14,6 +14,7 @@ Mandatory:
 6. Major Module: Remote Players
 7. Major Module: Live Chat
 8. Major Module: Implementing AI-controlled Opponent
+
 Bonus:
 9. Minor Module: User and Game Stats Dashboards
 10. Major Module: Two-Factor Authentication (2FA) and JWT
