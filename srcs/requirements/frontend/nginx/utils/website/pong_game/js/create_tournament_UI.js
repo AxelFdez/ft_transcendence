@@ -21,7 +21,7 @@ function updateTournamentSessionsList(tournamentSessions) {
 		}
     });
 
-    console.log('Updated tournament sessions list:', tournamentSessions);
+    // console.log('Updated tournament sessions list:', tournamentSessions);
 }
 
 
@@ -65,7 +65,7 @@ function tournamentSessions_createContent(tournamentSession, indexSession) {
 
     joinBtn.addEventListener('click', function() {
         // document.getElementById('joinCard' + indexSession).remove();
-        console.log("tournamentSession :", tournamentSession);
+        // console.log("tournamentSession :", tournamentSession);
         join_tournament_room(tournamentSession, indexSession);
     })
 }
@@ -137,7 +137,7 @@ function waiting_tournament(tournamentData) {
     document.getElementById('createRoomMenu').classList.add('hidden-element');
     const message = JSON.stringify({ messageType: 'quitTournamentSession' });
     socket.send(message);
-    navbarSwitch('on');
+    location.reload();
     })
 
 	socket.addEventListener('message', (event) => {

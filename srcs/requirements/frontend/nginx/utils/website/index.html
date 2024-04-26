@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+f<!DOCTYPE html>
 <html lang="fr">
 
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon.ico">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ft_transcendence - 42</title>
@@ -28,8 +29,8 @@
   <!-- <link href="dashboard/sb-admin-2.min.css" rel="stylesheet"> -->
 
   <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
   <link rel="manifest" href="/img/favicon/site.webmanifest">
   <link rel="mask-icon" href="/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
@@ -106,7 +107,7 @@
     <section id="main" class="d-flex justify-content-center fade-in hidden-element">
       <div class="container p-3 pt-0 bg-white rounded-bottom-4 shadow" style="max-width: 1200px;">
         <div class="col d-flex justify-content-center mx-4" >
-          <h1 class="display-2 text-info fw-bold bagelFatOne">ft_transcendence</h1>
+          <h1 class="display-2 text-info fw-bold mt-3">ft_transcendence</h1>
         </div>
         <div class="col-12 d-flex justify-content-center">
           <img class="" style="opacity: 70%; width: 50%;" src="img/img-cartoon.png" alt="img-cartoon">
@@ -160,15 +161,6 @@
         </div>
       </div>
 
-      <!-- chat general -->
-      <!-- <div id="chat-container">
-        <div id="chat-messages-generalsdfgh"></div>
-        <div id="input-container">
-          <input type="text" id="message-input_generalrew" placeholder="Ecris un chat..." onkeydown="handleKeyPressGeneral(event)">
-          <button id="send-button" onclick="sendMessage()">Send</button>
-        </div>
-      </div> -->
-
     </section>
     <section id="gameMenu" class="fade-in hidden-element">
       <div id="containerGameMenu" class="container bg-white rounded-bottom-4 shadow p-2 pb-4 px-4" style="max-width: 600px;">
@@ -177,8 +169,8 @@
 
         <div id='countdown' class="container mt-5 hidden-element">
           <div class="row justify-content-center">
-              <div class="col-md-6 text-center">
-                  <h2 id="countdown-text" class="text-info">waiting players...</h2>
+              <div class="col">
+                  <h2 id="countdown-text" class="text-info display-3 bagelFatOne text-center">waiting players...</h2>
               </div>
           </div>
       </div>
@@ -227,10 +219,10 @@
               <!-- ctrl mobile left -->
               <div class="col-4 my-auto hidden-element" id="mobileCtrlLeft">
                 <div class="col d-flex justify-content-center">
-                  <button type="button" class="btn btn-outline-light fw-bold mb-2 rounded-3 w-50" id="upLeftBtn">&uarr;</button>
+                  <button type="button" role="toggle" class="btn btn-outline-light fw-bold mb-2 rounded-3 w-50" id="upLeftBtn">&uarr;</button>
                 </div>
                 <div class="col d-flex justify-content-center">
-                  <button type="button" class="btn btn-outline-light fw-bold mt-1 rounded-3 w-50" id="dnLeftBtn">&darr;</button>
+                  <button type="button" role="toggle" class="btn btn-outline-light fw-bold mt-1 rounded-3 w-50" id="dnLeftBtn">&darr;</button>
                 </div>
               </div>
 
@@ -257,16 +249,16 @@
               </div>
             </div>
 
-            <div id="chat-container_session" class="container bg-light bg-opacity-50 rounded-4 my-3 shadow-lg p-2 hidden-element" style="height: 150px; max-width: 300px;">
-              <div id="chat-messages_session" class="" style="overflow-y: auto; height: 100px;"></div>
-              <input class="form-control form-control-sm border-info" type="text" id="message-input_session" placeholder="Ecris un chat session..." onkeydown="handleKeyPress(event)">
+            <!-- <div id="chat-container_session" class="container bg-light bg-opacity-50 rounded-4 my-3 shadow-lg p-2 hidden-element" style="height: 150px; max-width: 300px;"> -->
+              <!-- <div id="chat-messages_session" class="" style="overflow-y: auto; height: 100px;"></div> -->
+              <!-- <input class="form-control form-control-sm border-info" type="text" id="message-input_session" placeholder="Ecris un chat session..." onkeydown="handleKeyPress(event)"> -->
 
 
               <!-- <h5 class="text-light fst-italic me-1" onclick="sendMessageSession()" role="button" style="text-shadow: 2px 2px 4px rgba(150, 150, 150, 0.952);">Send</h5> -->
 
 
               <!-- <button id="send-button_session" class="btn" onclick="sendMessageSession()">Send</button> -->
-            </div>
+            <!-- </div> -->
           </div>
           <!-- <div id="surrenderMessage" class="container p-3 mt-5  unvisible" >
             <h5  class="display-3 fw-bold cl-green text-center ">CCC left the game</h5>
@@ -412,10 +404,10 @@
             <form method="POST" class="form-control border-0" id="signin-form">
               <input type="text" class="form-control mb-3 border-info text-center text-info" autocomplete="username" id="signIn-username" name="username" placeholder="Username">
               <input type="password" class="form-control mb-3 border-info text-center text-info" autocomplete="signIn-password" id="signIn-password" name="password" placeholder="Password">
-              <button id="signInBtn" class="btn btn-info text-white w-100 mt-3" type="submit">Sign in</button>
+              <button id="signInBtn" class="btn btn-info text-white w-100 bagelFatOne mt-3" type="submit">Sign in</button>
             </form>
             <hr class="border-info mb-4">
-            <button id="42connectBtn" class="btn btn-outline-info w-100" onclick="loginWith42()">Connect with 42</button>
+            <button id="42connectBtn" class="btn btn-outline-info bagelFatOne w-100" onclick="loginWith42()">Connect with 42</button>
           </div>
         </div>
       </div>
@@ -431,7 +423,7 @@
               <input type="text" class="form-control mb-3 border-info text-center text-info" id="username" name="username" aria-describedby="inputGroupPrepend2" placeholder="User name">
               <input type="email" class="form-control mb-3 border-info text-center text-info" id="email" name="email" aria-describedby="emailHelp" placeholder="Email">
               <input type="password" class="form-control mb-3 border-info text-center text-info" autocomplete="off" id="signUp-password" name="password" placeholder="Password">
-              <button id="signUpBtn" class="btn btn-info text-white w-100 mt-3" type="submit">Sign up</button>
+              <button id="signUpBtn" class="btn btn-info text-white w-100 bagelFatOne mt-3" type="submit">Sign up</button>
             </form>
           </div>
         </div>
@@ -818,7 +810,7 @@
       </div>
     </section>
 
-    <section id="tournament" class="fade-in">
+    <section id="tournament" class="fade-in hidden-element">
       <div class="container bg-white rounded-bottom-4 shadow " >
         <h1 class="display-1 fw-bold text-info text-center">Tournaments</h1>
         <h5 id="tournamentListeEmpty" class="fs-3 fw-bold text-secondary text-center mt-4">No tournament available</h5>

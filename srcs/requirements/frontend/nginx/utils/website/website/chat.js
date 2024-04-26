@@ -396,17 +396,17 @@ function inviteFriendCreateSession_createContent(username) {
 
     peer = new SimplePeer({initiator: true})
     peer.once('signal', (dataPeer) => {
-        console.log('PeerCreator signal:', dataPeer);
+        // console.log('PeerCreator signal:', dataPeer);
         socket.send(JSON.stringify({ messageType: 'inviteSession', level:level , peerId: dataPeer, paddleHeight: paddleHeight, usernameInvited: username}));
     });
 
     socket.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
         if (data.messageType === 'confirmInvite') {
-            console.log("confirmInvite")
             if (data.confirme == "true"){
-                if (document.getElementById('inviteToPlayDiv') == null)
-                    return;
+                // if (document.getElementById('inviteToPlayDiv') == null)
+                // return;
+                // console.log("confirmInvite")
                 const mainDiv = document.createElement('div');
                 mainDiv.id = 'inviteToPlayDiv';
                 mainDiv.classList = 'col-auto p-3 m-2 bg-white shadow-lg rounded-3 fade-in';
@@ -452,7 +452,7 @@ function inviteFriendCreateSession_createContent(username) {
                 row.appendChild(col);
                 secDiv.appendChild(row);
                 mainDiv.appendChild(secDiv);
-
+                // console.log('coucou');
                 document.getElementById('chat-area').appendChild(mainDiv);
 
                 cancelBtn.addEventListener('click', function() {
@@ -468,13 +468,13 @@ function inviteFriendCreateSession_createContent(username) {
                     message = JSON.stringify({ messageType: 'cancelInvit' , usernameInvited: username});
                     socket.send(message);
                     peer.destroy();
-                    // location.reload();
+                    location.reload();
                 })
             } else {
 
                 document.getElementById('chat-messages-general').classList.remove('unvisible');
                 document.getElementById('mainChat-form').classList.remove('unvisible');
-                console.log("Tu es deja dans une room");
+                // console.log("Tu es deja dans une room");
                 peer.close;
 
             }
@@ -490,6 +490,7 @@ function inviteFriendCreateSession_createContent(username) {
             document.getElementById('mainChat-form').classList.remove('unvisible');
             const messageContainer = document.getElementById('chat-area');
             messageContainer.scrollTop = messageContainer.scrollHeight;
+            location.reload();
             // const parentDiv = inviteToPlayDiv.parentNode; // Récupère le parent de mainDiv
 
             // Vérifie que le parent existe et que mainDiv est un enfant de ce parent
@@ -572,25 +573,25 @@ function invitedToPlay_createContent(session) {
 
     acceptBtn.addEventListener('click', function() {
         // LANCER LA PARTIE ...
-        console.log('Accept invite to play');
-        console.log('sessionId :', session.sessionId);
+        // console.log('Accept invite to play');
+        // console.log('sessionId :', session.sessionId);
         socket.send(JSON.stringify({ messageType: 'join', sessionId: session.sessionId}));
         socket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
             if (data.messageType === 'confirmJoin')
                 if (data.confirme == "true") {
                     peer2 = new SimplePeer({ initiator: false });
-                    console.log('Peer2 created:', peer2);
+                    // console.log('Peer2 created:', peer2);
                     peer2.signal(data.peerCreator[0]);
 
                     peer2.on('signal', (dataPeer) => {
                         // console.log('Peer2 signal:', dataPeer);
-                        console.log('sessionID:', session.sessionId);
+                        // console.log('sessionID:', session.sessionId);
                         socket.send(JSON.stringify({ messageType: 'playerPeer', sessionId: session.sessionId, playerPeer: dataPeer }));
                     });
 
                     peer2.on('connect', () => {
-                        console.log('Connected to peer2');
+                        // console.log('Connected to peer2');
                         leftPlayerName = session.CreatorUsername;
                         rightPlayerName= sessionUsername;
                         level = session.level;
@@ -603,7 +604,7 @@ function invitedToPlay_createContent(session) {
                         showSection("playPong");
                         document.getElementById('gameDiv').classList.remove('hidden-element');
                         peer2.on('connect', () => {
-                            console.log("connecté au peerID : ", data.peerId);
+                            // console.log("connecté au peerID : ", data.peerId);
                         });
                         peer2.on('data', (data) => {
                             // Convertir les données en objet JavaScript si nécessaire
@@ -619,8 +620,8 @@ function invitedToPlay_createContent(session) {
                             }
 
                         });
-                        console.log("level :", level)
-                        console.log("paddleHeight :", paddleHeight)
+                        // console.log("level :", level)
+                        // console.log("paddleHeight :", paddleHeight)
 
                         navbarSwitch('off');
                         onlineRun(peer2);

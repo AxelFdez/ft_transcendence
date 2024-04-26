@@ -31,7 +31,7 @@ class AllUserView(APIView):
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data[1:])
 
 class UserView(APIView):
     def get(self, request, pk):
@@ -43,6 +43,7 @@ class oauth_login(APIView):
     permission_classes = [permissions.AllowAny]
     def get(self, request, *args, **kwargs):
         code = request.GET.get('code')
+        # print('code', code)
         data = {
             'grant_type': 'authorization_code',
             'code': code,
@@ -50,13 +51,16 @@ class oauth_login(APIView):
             'client_id': settings.OAUTH_CLIENT_ID,
             'client_secret': settings.OAUTH_CLIENT_SECRET,
         }
+        # print('1', settings.OAUTH_REDIRECT_URI)
+        # print('2', settings.OAUTH_CLIENT_ID)
+        # print('3', settings.OAUTH_CLIENT_SECRET )
         response = requests.post('https://api.intra.42.fr/oauth/token', data=data)
         if response.status_code != 200:
-            print(response.json())
+            # print(response.json())
             return Response(response.json(), status=response.status_code)
         profile = requests.get('https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + response.json()['access_token']})
         if profile.status_code != 200:
-            print(profile.json())
+            # print(profile.json())
             return Response(profile.json(), status=profile.status_code)
         profile = profile.json()
         try:
@@ -111,10 +115,11 @@ class UserRegisterView(APIView):
             try :
                 send_email(user_profile, email)
             except Exception as e:
-                user_profile.delete()
-                user.delete()
-                print(e)
-                return Response({"Email not sent"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+                # user_profile.delete()
+                # user.delete()
+                # print(e)
+                pass
+                # return Response({"Email not sent"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
             return Response("User created", status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -26,13 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY_DJANGO')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Domain Name
 
 SITE_URL = os.environ.get('SITE_PROTOCOL') + os.environ.get('SITE_URL') + ":" + os.environ.get('SITE_PORT')
 
-# ALLOWED_HOSTS = [os.environ.get('SITE_URL'), 'localhost']
+# ALLOWED_HOSTS = [os.environ.get('SITE_URL') + ":" + os.environ.get('SITE_PORT') , 'localhost']
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -193,11 +193,10 @@ REST_FRAMEWORK = {
     )
 }
 
-
  # JWT settings
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	'UPDATE_LAST_LOGIN': True,
 }
@@ -221,7 +220,7 @@ HTTPSMS_PHONE = os.environ.get('HTTPSMS_PHONE')
 
 OAUTH_CLIENT_ID = os.environ.get('OAUTH_CLIENT_ID')
 OAUTH_CLIENT_SECRET = os.environ.get('OAUTH_CLIENT_SECRET')
-OAUTH_REDIRECT_URI = SITE_URL
+OAUTH_REDIRECT_URI = os.environ.get('OAUTH_REDIRECT_URI')
 OAUTH_PASSWORD_42 = os.environ.get('OAUTH_PASSWORD_42')
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

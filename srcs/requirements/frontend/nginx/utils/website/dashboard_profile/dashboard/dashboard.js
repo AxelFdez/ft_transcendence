@@ -83,7 +83,7 @@ function manageFriends(data) {
     if (friendsArray.length === 0) {
       document.getElementById('spinner' + 'friendShipBody-dashboard').remove();
       document.getElementById('friendsTextInfo').classList.remove('hidden-element');
-      console.log('No friendship to display in dashboard');
+      // console.log('No friendship to display in dashboard');
     } else {
       if (!document.getElementById('friendsTextInfo').classList.contains('hidden-element')) {
         document.getElementById('friendsTextInfo').classList.add('hidden-element');
@@ -206,7 +206,7 @@ function friends_createContent(friendsArray) {
       document.getElementById('removeFriendBtn' + i).addEventListener('click', function() {
         fetchRemoveFriendship(friendsArray[i][0])
         .then((data) => {
-          console.log('then remove', data);
+          // console.log('then remove', data);
           document.getElementById('friendList' + i).remove();
           getDashboardInfos();
         })
@@ -349,8 +349,8 @@ function friendExpandInfos_createContent(userObject, index) {
 
 function searchUser_createContent(friendObjet, index) {
 
-  console.log('index = ' + index);
-  console.log('friendObjet = ', friendObjet);
+  // console.log('index = ' + index);
+  // console.log('friendObjet = ', friendObjet);
 
   const mainDiv = document.createElement('div');
   mainDiv.classList = 'col-auto px-4 py-3 m-2 rounded-3 bg-success bg-opacity-10 shadow';
@@ -396,7 +396,7 @@ function searchUser_createContent(friendObjet, index) {
 
   checkPendingRequest(friendObjet.user.username)
   .then((result) => {
-    console.log('Valeur résolue de la promesse :', result);
+    // console.log('Valeur résolue de la promesse :', result);
 
     if (result === true) {
 
@@ -630,13 +630,14 @@ function gameHistory_createContent(gameInfos, score1, score2) {
 
   // infos
   const values = [
+    ['fa-solid fa-table-tennis text-secondary', gameInfos.game_type],
     ['fa-solid fa-gauge-high text-secondary', gameInfos.difficulty],
     ['fa-solid fa-calendar-days text-secondary', timeValues.date],
     ['fa-regular fa-clock text-secondary', timeValues.time],
     ['fa-solid fa-stopwatch text-secondary', timeValues.duration]
   ];
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
 
     const levelDiv_row = document.createElement('div');
     levelDiv_row.classList = 'row d-felx justify-content-between';
@@ -652,7 +653,11 @@ function gameHistory_createContent(gameInfos, score1, score2) {
     levelDiv_text.classList = 'col-auto';
     const text = document.createElement('p');
     text.classList = 'fw-bold text-secondary mb-0 bagelFatOne';
-    text.textContent = values[i][1];
+    if (i == 0 && gameInfos.game_type === 'pvp') {
+        text.textContent = 'duel';
+    } else {
+      text.textContent = values[i][1];
+    }
     levelDiv_text.appendChild(text);
     levelDiv_row.appendChild(levelDiv_text);
 

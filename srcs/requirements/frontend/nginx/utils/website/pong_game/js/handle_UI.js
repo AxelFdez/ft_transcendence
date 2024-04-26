@@ -55,8 +55,8 @@ btn.joinBtn.addEventListener("click", function() {
     btn.twoPlayersBtn.classList.remove("disabled");
     btn.tournamentBtn.classList.remove("disabled");
 
-    showSection('sessions');
-    reset_UI();
+    // showSection('sessions');
+    // reset_UI();
 });
 
 
@@ -68,6 +68,7 @@ btn.localBtn.addEventListener("click", function() {
     btn.localBtn.classList.remove("btn-outline-info");
     btn.localBtn.classList.add("btn-info");
     btn.onLineBtn.classList.add("disabled");
+    btn.onePlayerBtn.classList.remove("hidden-element");
 
     document.getElementById('dificultyMenu').classList.remove('hidden-element');
     document.getElementById('gameModeMenu').classList.remove('hidden-element');
@@ -84,16 +85,18 @@ btn.onLineBtn.addEventListener("click", function() {
         btn.onLineBtn.classList.add("disabled");
         btn.onLineBtn.classList.remove("btn-outline-info");
         btn.onLineBtn.classList.add("btn-info");
+        btn.createRoomBtn.classList.add("hidden-element");
 
         document.getElementById('onlineMenu').classList.remove('hidden-element');
-        document.getElementById('chat-container_session').classList.remove('hidden-element');
+        // document.getElementById('chat-container_session').classList.remove('hidden-element');
         playLocal = false;
         playOnline = true;
 
 
         join = false;
         playTournament = false;
-        } else {
+
+    } else {
 
         navbarSwitch('off');
         document.getElementById('containerGameMenu').querySelectorAll('button').forEach((element) => {
@@ -137,6 +140,7 @@ btn.easyBtn.addEventListener("click", function() {
 
     if (playLocal) {
         btn.onePlayerBtn.classList.remove("disabled");
+        btn.onePlayerBtn.classList.remove("hidden-element");
         btn.twoPlayersBtn.classList.remove("disabled");
         btn.tournamentBtn.classList.remove("disabled");
     }
@@ -238,6 +242,7 @@ btn.twoPlayersBtn.addEventListener("click", function() {
         create_TwoPlayers_input();
     }
     if (playOnline) {
+        btn.createRoomBtn.classList.remove("hidden-element");
         btn.createRoomBtn.classList.remove('disabled');
         if (join === true)
             showSection('sessions');
@@ -265,19 +270,19 @@ btn.tournamentBtn.addEventListener("click", function() {
         showSection('tournament');
         return;
     }
-    // if (playOnline) {
-    //     // btn.createRoomBtn.classList.remove('disabled');
-    //     tournament = true;
-    //     create_Tournament_mode();
-    //     return;
-    // }
     btn.onePlayerBtn.classList.add("disabled");
     btn.twoPlayersBtn.classList.add("disabled");
     btn.tournamentBtn.classList.add("disabled");
     btn.tournamentBtn.classList.remove("btn-outline-info");
     btn.tournamentBtn.classList.add("btn-info");
-
-    create_Tournament_mode();
+    tournament = true;
+    if (playOnline) {
+        tournamentSize = 4;
+        create_tournament_room();
+    }
+    else {
+        create_Tournament_mode();
+    }
 });
 
 btn.createRoomBtn.addEventListener("click", function() {
@@ -301,8 +306,8 @@ function initPlayBtn() {
                 alert_message('Player name missing !');
                 return;
             }
-            leftPlayerName = "cpu";
-            rightPlayerName = playerName.value;
+            leftPlayerName = playerName.value;
+            rightPlayerName = "cpu";
         }
 
         else if(twoPlayers) {
@@ -322,7 +327,7 @@ function initPlayBtn() {
         }
 
         else if(tournament) {
-            console.log('tournament condition');
+            // console.log('tournament condition');
             for(let i = 0; i < tournamentSize; i++) {
 
                 const playerNameInput = document.getElementById("playerName" + (i+1));
@@ -355,7 +360,11 @@ function initPlayBtn() {
         reset_UI();
         removeInput();
         navbarSwitch('off');
-        localRun();
+        if (onePlayer) {
+            iaRun();
+        }
+        else
+            localRun();
 
     });
 }
@@ -383,7 +392,7 @@ function reset_UI() {
     document.getElementById('dificultyMenu').classList.add('hidden-element');
     document.getElementById('gameModeMenu').classList.add('hidden-element');
     document.getElementById('onlineMenu').classList.add('hidden-element');
-    document.getElementById('chat-container_session').classList.add('hidden-element');
+    // document.getElementById('chat-container_session').classList.add('hidden-element');
 
 }
 

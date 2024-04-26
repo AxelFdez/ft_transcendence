@@ -52,7 +52,7 @@ function alert_register_success() {
     }, 3000);
 }
 
-function alert_login_fail(errorMessage) {
+function alert_login_fail() {
     // Disable form
     const signInSection = document.getElementById('signIn');
     // Parcourez tous les éléments descendants de la section
@@ -66,7 +66,7 @@ function alert_login_fail(errorMessage) {
     div.style.maxWidth= '350px';
     div.role = 'alert';
     div.id = 'alert';
-    div.textContent = errorMessage;
+    div.textContent = 'Error';
 
     let button = document.createElement('button');
     button.classList = 'btn-close';
@@ -218,14 +218,15 @@ function refreshAccessToken() {
         if (response.ok) {
             return response.json();
         } else {
-            console.log('access token expired, auto logout redirect to signIn');
+            // console.log('access token expired, auto logout redirect to signIn');
             userLogout();
             showSection('signIn');
         }
     })
     .then(data => {
         localStorage.setItem('accessToken', data.access);
-        console.log('Token refreshed successfully');
+        location.reload();
+        // console.log('Token refreshed successfully');
     })
 }
 
@@ -244,7 +245,8 @@ function verifyToken() {
             // console.log('acces token verified');
 
         } else {
-            refreshAccessToken()
+            refreshAccessToken();
+
             // console.log('refreshAccessToken() called');
         }
     })
